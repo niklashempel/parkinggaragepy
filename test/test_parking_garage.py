@@ -65,3 +65,17 @@ class TestParkingGarage(TestCase):
         mock_servo.assert_called_with(0) # indirect outputs
         self.assertFalse(sut.door_open) # direct outputs
 
+    @patch.object(GPIO, "output")
+    def test_turn_on_red_light(self, mock_light: Mock):
+        sut = ParkingGarage()
+        sut.turn_on_red_light()
+        mock_light.assert_called_with(sut.LED_PIN, True)
+        self.assertTrue(sut.red_light_on)
+    
+
+    @patch.object(GPIO, "output")
+    def test_turn_off_red_light(self, mock_light: Mock):
+        sut = ParkingGarage()
+        sut.turn_off_red_light()
+        mock_light.assert_called_with(sut.LED_PIN, False)
+        self.assertFalse(sut.red_light_on)
