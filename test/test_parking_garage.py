@@ -79,3 +79,21 @@ class TestParkingGarage(TestCase):
         sut.turn_off_red_light()
         mock_light.assert_called_with(sut.LED_PIN, False)
         self.assertFalse(sut.red_light_on)
+
+    @patch.object(GPIO, "output")
+    @patch.object(ParkingGarage, "get_number_occupied_spots")
+    def test_manage_red_light_full_garage(self, mock_spots: Mock, mock_light: Mock):
+        mock_spots.return_value = 3
+        sut = ParkingGarage()
+        sut.manage_red_light()
+        mock_light.assert_called_with(sut.LED_PIN, False)
+        self.assertFalse(sut.red_light_on)
+    
+    @patch.object(GPIO, "output")
+    @patch.object(ParkingGarage, "get_number_occupied_spots")
+    def test_manage_red_light_not_full_garage(self, mock_spots: Mock, mock_light: Mock):
+        mock_spots.return_value = 2
+        sut = ParkingGarage()
+        sut.manage_red_light()
+        mock_light.assert_called_with(sut.LED_PIN, True)
+        self.assertTrue(sut.red_light_on)
