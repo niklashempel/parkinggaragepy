@@ -21,6 +21,14 @@ class TestParkingGarage(TestCase):
         sut = ParkingGarage()
         with self.assertRaises(ParkingGarageError):
             sut.check_occupancy(sut.LED_PIN)
+
+    @patch.object(GPIO, "input")
+    def test_get_number_occupied_spots(self, mock_distance_sensor: Mock):
+        mock_distance_sensor.side_effect = [GPIO.HIGH, GPIO.HIGH, GPIO.LOW]
+
+        sut = ParkingGarage()
+        occupied_spots = sut.get_number_occupied_spots()
+        self.assertEqual(2, occupied_spots)
         
         
 
