@@ -29,7 +29,26 @@ class TestParkingGarage(TestCase):
         sut = ParkingGarage()
         occupied_spots = sut.get_number_occupied_spots()
         self.assertEqual(2, occupied_spots)
-        
-        
+    
+    @patch.object(SDL_DS3231, "read_datetime")
+    def test_calculate_parking_fee_weekday(self, mock_rtc: Mock):
+        entry_time = datetime(2024, 11, 4, 12, 30) # Monday
+        exit_time = datetime(2024, 11, 4, 15, 24)
+        mock_rtc.return_value = exit_time
+
+        sut = ParkingGarage()
+        parking_fee = sut.calculate_parking_fee(entry_time)
+        self.assertEqual(7.5, parking_fee)
+
+    
+    @patch.object(SDL_DS3231, "read_datetime")
+    def test_calculate_parking_fee_weekend(self, mock_rtc: Mock):
+        entry_time = datetime(2024, 11, 3, 12, 30) # Saturday
+        exit_time = datetime(2024, 11, 3, 15, 24)
+        mock_rtc.return_value = exit_time
+
+        sut = ParkingGarage()
+        parking_fee = sut.calculate_parking_fee(entry_time)
+        self.assertEqual(10, parking_fee)
 
 

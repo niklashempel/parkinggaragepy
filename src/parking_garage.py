@@ -1,4 +1,5 @@
 import time
+import math
 from datetime import datetime
 
 try:
@@ -44,8 +45,12 @@ class ParkingGarage:
         return self.check_occupancy(self.INFRARED_PIN1) + self.check_occupancy(self.INFRARED_PIN2) + self.check_occupancy(self.INFRARED_PIN3)
 
     def calculate_parking_fee(self, entry_time: datetime) -> float:
-        # To be implemented
-        pass
+        current_time = self.rtc.read_datetime()
+        diff = current_time - entry_time 
+
+        hours = diff.total_seconds() / 3600
+        fee = 2.5 if current_time.isoweekday() > 5 else 0 # Saturday and Sunday equal 5 and 6, respectively
+        return math.ceil(hours) * 2.5 + fee
 
     def open_garage_door(self) -> None:
         # To be implemented
