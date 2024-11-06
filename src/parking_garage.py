@@ -49,8 +49,9 @@ class ParkingGarage:
         diff = current_time - entry_time 
 
         hours = diff.total_seconds() / 3600
-        fee = 2.5 if current_time.isoweekday() > 5 else 0 # Saturday and Sunday equal 5 and 6, respectively
-        return math.ceil(hours) * 2.5 + fee
+        base_fee = 2.5
+        weekend_fee = 1.25 if current_time.isoweekday() > 5 else 1 # Saturday and Sunday equal 5 and 6, respectively
+        return math.ceil(hours) * base_fee * weekend_fee
 
     def open_garage_door(self) -> None:
         # To be implemented

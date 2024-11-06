@@ -43,12 +43,12 @@ class TestParkingGarage(TestCase):
     
     @patch.object(SDL_DS3231, "read_datetime")
     def test_calculate_parking_fee_weekend(self, mock_rtc: Mock):
-        entry_time = datetime(2024, 11, 3, 12, 30) # Saturday
-        exit_time = datetime(2024, 11, 3, 15, 24)
+        entry_time = datetime(2024, 11, 3, 10, 15) # Saturday
+        exit_time = datetime(2024, 11, 3, 18, 12)
         mock_rtc.return_value = exit_time
 
         sut = ParkingGarage()
         parking_fee = sut.calculate_parking_fee(entry_time)
-        self.assertEqual(10, parking_fee)
+        self.assertEqual(25, parking_fee)
 
 
