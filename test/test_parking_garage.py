@@ -51,4 +51,17 @@ class TestParkingGarage(TestCase):
         parking_fee = sut.calculate_parking_fee(entry_time)
         self.assertEqual(25, parking_fee)
 
+    @patch.object(ParkingGarage, "change_servo_angle")
+    def test_open_garage_door(self, mock_servo: Mock):
+        sut = ParkingGarage()
+        sut.open_garage_door()
+        mock_servo.assert_called_with(12) # indirect outputs
+        self.assertTrue(sut.door_open) # direct outputs
+
+    @patch.object(ParkingGarage, "change_servo_angle")
+    def test_close_garage_door(self, mock_servo: Mock):
+        sut = ParkingGarage()
+        sut.close_garage_door()
+        mock_servo.assert_called_with(0) # indirect outputs
+        self.assertFalse(sut.door_open) # direct outputs
 
