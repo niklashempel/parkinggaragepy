@@ -17,5 +17,11 @@ class TestParkingGarage(TestCase):
         is_occupied = system.check_occupancy(system.INFRARED_PIN1)
         self.assertTrue(is_occupied)
         
+    def test_check_occupancy_throws_error_if_not_correct_sensor(self):
+        sut = ParkingGarage()
+        with self.assertRaises(ParkingGarageError):
+            sut.check_occupancy(sut.LED_PIN)
+        
+        
 
 
